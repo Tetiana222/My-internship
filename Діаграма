@@ -1,1 +1,106 @@
 https://dbdiagram.io/d/6665d9ca9713410b0521e43e
+
+Table User_Registration {User_id integer
+  Phone_Number integer
+}
+
+Table Users {
+  User_id integer [primary key]
+  User_Name varchar
+  TIN integer
+  E_mail varchar
+  Password varchar
+  Address varchar
+  Bank varchar
+}
+
+Table Contracts {
+  Id_Contr integer [primary key]
+  Title varchar
+  Body text [note: 'Content of the contract']
+  Created_at timestamp
+  User_id_Cr integer
+  Invested_at timestamp
+  User_id_In integer
+  Type text
+}
+
+Table Fin_Contr {
+  Id_Contr integer 
+  Loan_amount integer
+  Loan_term_month integer
+  Interest_rate integer
+  Repayment_Method text
+} 
+
+Table Investments {
+  Type text [primary key]
+  Id_Contr integer 
+  User_id_In integer
+ } 
+
+Table  Projects {
+  Type text [primary key]
+  Id_Contr integer 
+  User_id_Cr integer
+ } 
+
+Table Credit_Managers {
+  Id_man integer [primary key]
+  User_Name varchar
+  E_mail varchar
+  Password varchar
+  Position varchar
+}
+
+Table Questionnaires {
+  Id_Quest integer [primary key]
+  Borrower integer
+  Created_at timestamp
+  Manager integer
+  Modified_at timestamp
+  Status_Quest varchar
+}
+
+Table Orders {
+  Id_Ord integer [primary key]
+  Id_Quest integer
+  Created_at timestamp
+  Applications varchar
+  Manager integer
+  Modified_at timestamp
+  Status_Ord varchar
+  Id_Contr integer
+}
+
+Ref: Contracts.User_id_In > Investments.User_id_In // many-to-one
+
+Ref: Users.User_id < User_Registration.User_id
+
+Ref: Contracts.User_id_Cr > Users.User_id
+
+Ref: Contracts.Id_Contr < Fin_Contr.Id_Contr
+
+Ref: Investments.User_id_In > Users.User_id
+
+Ref: Investments.Id_Contr > Contracts.Id_Contr
+
+Ref: Investments.Type < Contracts.Type
+
+Ref: Projects.User_id_Cr > Users.User_id
+
+Ref: Projects.Id_Contr > Contracts.Id_Contr
+
+Ref: Projects.Type < Contracts.Type
+
+Ref: Contracts.User_id_Cr > Projects.User_id_Cr
+ 
+Ref: "Credit_Managers"."Id_man" < "Orders"."Manager"
+
+Ref: "Credit_Managers"."Id_man" < "Questionnaires"."Manager"
+
+Ref: "Questionnaires"."Id_Quest" < "Orders"."Id_Quest"
+
+Ref: "Contracts"."Id_Contr" < "Orders"."Id_Contr"
+
+Ref: "Users"."User_id" < "Questionnaires"."Borrower"
